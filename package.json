@@ -24,6 +24,7 @@
   "homepage": "https://github.com/Johnnypoju/Full-Stack-Open-Part3#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "mongoose": "^6.0.8",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
