@@ -20,6 +20,7 @@ app.use(morgan(':method :url :body'))
 //    return maxId+1
 //}
 
+//adding person to MongoDB
 app.post('/api/persons', (req, res) => {
     console.log(req)
     const body = req.body
@@ -48,16 +49,19 @@ app.post('/api/persons', (req, res) => {
     })
 })
 
+//Get webpage
 app.get('/', (req,res) => {
     res.send('<h1>Welcome to phonebook</h1>')
 })
 
+//Get list of people from DB
 app.get('/api/persons', (req,res) => {
     Person.find({}).then(people => {
         res.json(people)
     })
 })
 
+//Get person by id
 app.get('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
     Note.findById(request.params.id).then(note => {
@@ -72,6 +76,7 @@ app.get('/api/persons/:id', (req, res) => {
     
 })
 
+//get info for amount of entries
 app.get('/info', (req,res) => {
     const date = new Date();
     res.send(`<div>Phonebook has info for ${persons.length} people.</div><br></br>
@@ -79,6 +84,7 @@ app.get('/info', (req,res) => {
 })
 
 
+//delete person (not yet implementd to DB)
 app.delete('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
     persons = persons.filter(note => note.id !== id)
