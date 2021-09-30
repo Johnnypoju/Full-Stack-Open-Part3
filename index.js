@@ -76,7 +76,7 @@ app.get('/api/persons/:id', (req, res) => {
     
 })
 
-//get info for amount of entries
+//get info for amount of entries.
 app.get('/info', (req,res) => {
     const date = new Date();
     res.send(`<div>Phonebook has info for ${persons.length} people.</div><br></br>
