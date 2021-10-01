@@ -32,8 +32,7 @@ app.use(errorHandler)
 
 //adding person to MongoDB
 app.post('/api/persons', (req, res) => {
-    console.log(req)
-    const body = req.body
+    const body = req.body.persons
     if (!body.name) {
         return res.status(400).json({
             error: 'name missing'
@@ -43,20 +42,28 @@ app.post('/api/persons', (req, res) => {
             error: 'number missing'
         })
     } 
-    else if(persons.find(person => person.name === body.name)) {
-        return res.status(400).json({
-            error: 'name already exists in phonebook'
+    else {
+        Person.findOne({name: body.name}).then(result => {
+            if (result !== null) {
+                return res.status(400).json({
+                    error: 'name already exists in phonebook'
+                })
+            }
+            else{
+                const person = new Person({
+                    name: body.name,
+                    number: body.number,
+                })
+            
+                console.log(person)
+                person.save().then(savedPerson => {
+                    res.json(savedPerson)
+                })
+            }
         })
     }
     
-    const person = new Person({
-        name: body.name,
-        number: body.number,
-      })
-    console.log(person)
-    person.save().then(savedPerson => {
-        res.json(savedPerson)
-    })
+    
 })
 
 //Get webpage
