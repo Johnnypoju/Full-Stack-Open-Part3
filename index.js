@@ -74,13 +74,13 @@ app.get('/api/persons', (req,res) => {
 //Get person by id
 app.get('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
-    Note.findById(request.params.id).then(note => {
-        if (note) {
-        res.json(note.number)
+    Note.findById(request.params.id).then(person => {
+        if (person) {
+        res.json(person.number)
         }
         else {
         res.status(404).end()
-    }})
+    }}).catch(error => next(error))
     
 })
 
@@ -94,14 +94,9 @@ app.get('/info', (req,res) => {
 
 //delete person (not yet implementd to DB)
 app.delete('/api/persons/:id', (req, res, next) => {
-    Person.findById(request.params.id)
+    Person.findByIdAndRemove(request.params.id)
         .then(person => {
-            if (person) {
-                res.json(person)
-            }
-            else {
-                res.status(404).end()
-            }
+            res.status(204).end()
         })
         .catch(error => next(error))
         
