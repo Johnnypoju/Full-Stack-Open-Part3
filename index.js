@@ -98,6 +98,11 @@ app.get('/info', (req,res) => {
     <div>${date}</div>`)
 })
 
+//update person number
+app.put('/api/persons/:id', (req, res ,next) => {
+    Person.findByIdAndUpdate(req.params.id, req)
+        .catch(error => next(error))
+})
 
 //delete person (not yet implementd to DB)
 app.delete('/api/persons/:id', (req, res, next) => {
