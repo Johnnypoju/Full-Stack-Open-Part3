@@ -74,7 +74,7 @@ app.get('/api/persons', (req,res) => {
 //Get person by id
 app.get('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
-    Note.findById(request.params.id).then(person => {
+    Note.findById(req.params.id).then(person => {
         if (person) {
         res.json(person.number)
         }
@@ -94,7 +94,7 @@ app.get('/info', (req,res) => {
 
 //delete person (not yet implementd to DB)
 app.delete('/api/persons/:id', (req, res, next) => {
-    Person.findByIdAndRemove(request.params.id)
+    Person.findByIdAndRemove(req.params.id)
         .then(person => {
             res.status(204).end()
         })
