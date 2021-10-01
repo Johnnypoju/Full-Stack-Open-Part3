@@ -53,7 +53,7 @@ app.post('/api/persons', (req, res) => {
         name: body.name,
         number: body.number,
       })
-
+    console.log(person)
     person.save().then(savedPerson => {
         res.json(savedPerson)
     })
