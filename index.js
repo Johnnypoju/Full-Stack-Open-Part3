@@ -5,13 +5,23 @@ const morgan = require('morgan')
 const app = express()
 const Person = require('./models/person')
 
+const errorHandler = (error, request, response, next) => {
+    console.error(error.message)
+  
+    if (error.name === 'CastError') {
+      return response.status(400).send({ error: 'malformatted id' })
+    }
+  
+    next(error)
+  }
+
 app.use(express.json())
 app.use(express.static('build'))
 morgan.token('body', req => {
     return JSON.stringify(req.body)
 })
 app.use(morgan(':method :url :body'))
-
+app.use(errorHandler)
 //deprecated by addition of a DB
 //const generateId = () => {
 //    const maxId = persons.length > 0
@@ -72,8 +82,6 @@ app.get('/api/persons/:id', (req, res) => {
         res.status(404).end()
     }})
     
-
-    
 })
 
 //get info for amount of entries.
@@ -85,10 +93,18 @@ app.get('/info', (req,res) => {
 
 
 //delete person (not yet implementd to DB)
-app.delete('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    persons = persons.filter(note => note.id !== id)
-    res.status(204).end()
+app.delete('/api/persons/:id', (req, res, next) => {
+    Person.findById(request.params.id)
+        .then(person => {
+            if (person) {
+                res.json(person)
+            }
+            else {
+                res.status(404).end()
+            }
+        })
+        .catch(error => next(error))
+        
 })
 
 const PORT= process.env.PORT
