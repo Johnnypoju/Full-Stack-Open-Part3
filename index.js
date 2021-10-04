@@ -32,7 +32,6 @@ app.use(errorHandler)
 
 //adding person to MongoDB
 app.post('/api/persons', (req, res) => {
-    console.log(req.body)
     const body = req.body
     if (!body.name) {
         return res.status(400).json({
@@ -55,8 +54,6 @@ app.post('/api/persons', (req, res) => {
                     name: body.name,
                     number: body.number,
                 })
-            
-                console.log(person)
                 person.save().then(savedPerson => {
                     res.json(savedPerson)
                 })
@@ -101,9 +98,9 @@ app.get('/info', (req,res) => {
 //update person number
 app.put('/api/persons/:id', (req, res ,next) => {
     const body = req.body
-    console.log(body)
     Person.findByIdAndUpdate(req.params.id, { number : body.number})
         .then(person => {
+            res.json(body)
             res.status(204).end()
         })
         .catch(error => next(error))
