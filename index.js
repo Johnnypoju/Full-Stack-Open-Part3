@@ -100,7 +100,8 @@ app.get('/info', (req,res) => {
 
 //update person number
 app.put('/api/persons/:id', (req, res ,next) => {
-    Person.findByIdAndUpdate(req.params.id, req)
+    const body = req.params
+    Person.findByIdAndUpdate(body.id, { number : body.number})
         .catch(error => next(error))
 })
 
