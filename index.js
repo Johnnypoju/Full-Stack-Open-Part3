@@ -32,7 +32,8 @@ app.use(errorHandler)
 
 //adding person to MongoDB
 app.post('/api/persons', (req, res) => {
-    const body = req.body.persons
+    console.log(req.body)
+    const body = req.body
     if (!body.name) {
         return res.status(400).json({
             error: 'name missing'
@@ -88,7 +89,6 @@ app.get('/api/persons/:id', (req, res) => {
         else {
         res.status(404).end()
     }}).catch(error => next(error))
-    
 })
 
 //get info for amount of entries.
@@ -100,8 +100,12 @@ app.get('/info', (req,res) => {
 
 //update person number
 app.put('/api/persons/:id', (req, res ,next) => {
-    const body = req.params
-    Person.findByIdAndUpdate(body.id, { number : body.number})
+    const body = req.body
+    console.log(body)
+    Person.findByIdAndUpdate(req.params.id, { number : body.number})
+        .then(person => {
+            res.status(204).end()
+        })
         .catch(error => next(error))
 })
 
