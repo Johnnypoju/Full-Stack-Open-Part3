@@ -15,6 +15,7 @@ mongoose.connect(url)
 const personSchema = new mongoose.Schema({
     name: String,
     number: String,
+    id: String
     })
 
 //id objektin muuttaminen json muotoon ja __v kentän poisto

@@ -53,6 +53,7 @@ app.post('/api/persons', (req, res) => {
                 const person = new Person({
                     name: body.name,
                     number: body.number,
+
                 })
                 person.save().then(savedPerson => {
                     res.json(savedPerson)
@@ -78,8 +79,7 @@ app.get('/api/persons', (req,res) => {
 
 //Get person by id
 app.get('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    Note.findById(req.params.id).then(person => {
+    Person.findById(req.params.id).then(person => {
         if (person) {
         res.json(person.number)
         }
@@ -100,7 +100,7 @@ app.put('/api/persons/:id', (req, res ,next) => {
     const body = req.body
     Person.findByIdAndUpdate(req.params.id, { number : body.number})
         .then(person => {
-            res.json(body)
+            res.json(person)
             res.status(204).end()
         })
         .catch(error => next(error))
