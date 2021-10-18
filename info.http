@@ -3,3 +3,13 @@ GET http://localhost:3001/info
 ###
 
 GET http://localhost:3001/api/persons/61668e23624d551838bd0307
+
+###
+
+POST http://localhost:3001/api/persons
+content-type: application/json
+
+{
+    "name" : "jbeou",
+    "number" : "a123141"
+}

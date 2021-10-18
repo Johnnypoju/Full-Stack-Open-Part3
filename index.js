@@ -5,23 +5,19 @@ const morgan = require('morgan')
 const app = express()
 const Person = require('./models/person')
 
-const errorHandler = (error, request, response, next) => {
-    console.error(error.message)
-  
-    if (error.name === 'CastError') {
-      return response.status(400).send({ error: 'malformatted id' })
-    }
-  
-    next(error)
-  }
+
 
 app.use(express.json())
+
+
+
+
 app.use(express.static('build'))
 morgan.token('body', req => {
     return JSON.stringify(req.body)
 })
 app.use(morgan(':method :url :body'))
-app.use(errorHandler)
+
 //deprecated by addition of a DB
 //const generateId = () => {
 //    const maxId = persons.length > 0
@@ -31,25 +27,12 @@ app.use(errorHandler)
 //}
 
 //adding person to MongoDB
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
     const body = req.body
-    if (!body.name) {
-        return res.status(400).json({
-            error: 'name missing'
-        })
-    } else if (!body.number) {
-        return res.status(400).json({
-            error: 'number missing'
-        })
-    } 
-    else {
+
+    
         Person.findOne({name: body.name}).then(result => {
-            if (result !== null) {
-                return res.status(400).json({
-                    error: 'name already exists in phonebook'
-                })
-            }
-            else{
+            
                 const person = new Person({
                     name: body.name,
                     number: body.number,
@@ -57,9 +40,11 @@ app.post('/api/persons', (req, res) => {
                 person.save().then(savedPerson => {
                     res.json(savedPerson)
                 })
+                .catch(error => {
+                    next(error)})
             }
-        })
-    }
+        )
+   
     
     
 })
@@ -120,6 +105,23 @@ app.delete('/api/persons/:id', (req, res, next) => {
         .catch(error => next(error))
         
 })
+
+const errorHandler = (error, request, response, next) => {
+    
+  
+    if (error.name === 'CastError') {
+        console.log(error.message)
+        return response.status(400).send({ error: 'malformatted id' })
+    }
+    else if (error.name === 'ValidationError') {
+        console.log(error.message)
+        return response.status(400).send({error: error.message})
+    }
+  
+    next(error)
+  }
+
+app.use(errorHandler)
 
 const PORT= process.env.PORT
 app.listen(PORT, () => {
