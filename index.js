@@ -53,10 +53,8 @@ app.post('/api/persons', (req, res) => {
                 const person = new Person({
                     name: body.name,
                     number: body.number,
-
                 })
                 person.save().then(savedPerson => {
-                    
                     res.json(savedPerson)
                 })
             }
@@ -74,6 +72,7 @@ app.get('/', (req,res) => {
 //Get list of people from DB
 app.get('/api/persons', (req,res) => {
     Person.find({}).then(people => {
+        console.log(people)
         res.json(people)
     })
 })
@@ -82,7 +81,7 @@ app.get('/api/persons', (req,res) => {
 app.get('/api/persons/:id', (req, res) => {
     Person.findById(req.params.id).then(person => {
         if (person) {
-        res.json(person.number)
+        res.json(person)
         }
         else {
         res.status(404).end()
@@ -91,9 +90,15 @@ app.get('/api/persons/:id', (req, res) => {
 
 //get info for amount of entries.
 app.get('/info', (req,res) => {
-    const date = new Date();
-    res.send(`<div>Phonebook has info for ${persons.length} people.</div><br></br>
-    <div>${date}</div>`)
+    
+    Person.countDocuments({}, function (err, count) {
+        const date = new Date();
+        console.log(count)
+        res.send(`<div>Phonebook has info for ${count} people.</div><br></br>
+        <div>${date}</div>`) 
+    })
+    
+    
 })
 
 //update person number
@@ -101,8 +106,6 @@ app.put('/api/persons/:id', (req, res ,next) => {
     const body = req.body
     Person.findByIdAndUpdate(req.params.id, { number : body.number})
         .then(person => {
-            
-            res.json(person)
             res.status(204).end()
         })
         .catch(error => next(error))
@@ -112,7 +115,6 @@ app.put('/api/persons/:id', (req, res ,next) => {
 app.delete('/api/persons/:id', (req, res, next) => {
     Person.findByIdAndRemove(req.params.id)
         .then(person => {
-            console.log(person)
             res.status(204).end()
         })
         .catch(error => next(error))
