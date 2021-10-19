@@ -8,15 +8,11 @@ const Person = require('./models/person')
 
 
 app.use(express.json())
-
-
-
-
 app.use(express.static('build'))
 morgan.token('body', req => {
     return JSON.stringify(req.body)
 })
-app.use(morgan(':method :url :body'))
+//app.use(morgan(':method :url :body'))
 
 //deprecated by addition of a DB
 //const generateId = () => {
