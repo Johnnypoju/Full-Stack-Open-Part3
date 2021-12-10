@@ -40,8 +40,6 @@ app.post('/api/persons', (req, res, next) => {
     }
     )
 
-
-
 })
 
 //Get webpage
@@ -91,7 +89,7 @@ app.put('/api/persons/:id', (req, res ,next) => {
         .catch(error => next(error))
 })
 
-//delete person (not yet implementd to DB)
+//delete person
 app.delete('/api/persons/:id', (req, res, next) => {
     Person.findByIdAndRemove(req.params.id)
         .then(() => {
