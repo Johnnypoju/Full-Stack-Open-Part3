@@ -91,6 +91,7 @@ app.put('/api/persons/:id', (req, res ,next) => {
 
 //delete person
 app.delete('/api/persons/:id', (req, res, next) => {
+    console.log(req)
     Person.findByIdAndRemove(req.params.id)
         .then(() => {
             res.status(204).end()
